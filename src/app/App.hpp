@@ -2,6 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include <memory>
 #include "TextPanel.hpp"
+#include "Map.hpp"
+#include "Renderer2D.hpp"
 
 class App {
 public:
@@ -17,8 +19,11 @@ private:
     // recursos
     sf::Font font_;
 
-    // painéis de texto
-    std::unique_ptr<TextPanel> leftPanel_;
+    // ESQUERDA: labirinto 2D
+    Map        map_;
+    Renderer2D r2d_{32.f};
+
+    // DIREITA: placeholder (texto)
     std::unique_ptr<TextPanel> rightPanel_;
 
     // helpers
