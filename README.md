@@ -21,3 +21,9 @@ sudo apt install g++ cmake make git
 
 # Biblioteca gráfica (SFML)
 sudo apt install libsfml-dev
+
+# Para compilar o projeto:
+rm -rf build/
+cmake -S . -B build
+cmake --build build -j
+./build/DoomRay
