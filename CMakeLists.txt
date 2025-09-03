@@ -12,6 +12,7 @@ add_executable(DoomRay
     src/ui/TextPanel.cpp
     src/ui/Renderer2D.cpp
     src/core/Map.cpp
+    src/core/Player.cpp
 )
 
 # adiciona os diretórios de include

@@ -1,5 +1,4 @@
 #include "App.hpp"
-#include "Map.hpp"
 #include <iostream>
 
 static const char* kFontPath = "/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf";
@@ -10,7 +9,7 @@ App::App() {
     winH_ = static_cast<float>(desktop.height);
     panelW_ = winW_ * 0.5f;
 
-    window_.create(desktop, "DoomRay - 2D Map (left) | placeholder (right)", sf::Style::Fullscreen);
+    window_.create(desktop, "DoomRay - Player 2D (esq) | placeholder (dir)", sf::Style::Fullscreen);
     window_.setFramerateLimit(60);
 
     viewLeft_  = sf::View(sf::FloatRect(0.f, 0.f, panelW_, winH_));
@@ -22,10 +21,8 @@ App::App() {
         std::cerr << "Erro: nao consegui carregar a fonte: " << kFontPath << "\n";
     }
 
-    // mapa fixo
     map_ = Map::classic();
 
-    // painel direito: mantém texto
     rightPanel_ = std::make_unique<TextPanel>(
         TextPanel::Spec{ .utf8 = "Viewport 3D (em breve)",
                          .size = 48u,
@@ -36,8 +33,14 @@ App::App() {
 }
 
 void App::run() {
+    sf::Clock clock;
     while (window_.isOpen()) {
+        float dt = clock.restart().asSeconds();
+
         handleEvents();
+        // update do player (input + colisão)
+        player_.update(dt, map_);
+
         draw();
     }
 }
@@ -55,11 +58,9 @@ void App::handleEvents() {
 void App::draw() {
     window_.clear(sf::Color::Black);
 
-    // esquerda: labirinto 2D
     window_.setView(viewLeft_);
-    r2d_.draw(window_, map_);
+    r2d_.draw(window_, map_, &player_);
 
-    // direita: permanece o texto (placeholder)
     window_.setView(viewRight_);
     rightPanel_->draw(window_);
 
